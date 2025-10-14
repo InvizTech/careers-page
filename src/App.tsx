@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Briefcase, MapPin, Clock, ChevronDown } from 'lucide-react';
+import { ArrowRight, Briefcase, MapPin, Clock, ChevronDown, Home } from 'lucide-react'; // Added Home icon
 import { Button } from './components/ui/button';
 import {
   Dialog,
@@ -13,6 +13,7 @@ import {
 import { Input } from './components/ui/input';
 import { Label } from './components/ui/label';
 import { Textarea } from './components/ui/textarea';
+import { Link } from 'react-router-dom'; // Added for navigation
 
 interface Job {
   title: string;
@@ -21,6 +22,10 @@ interface Job {
   location: string;
   type: string;
   department: string;
+  fullDescription?: string;
+  responsibilities?: string[];
+  qualifications?: string[];
+  benefits?: string[];
 }
 
 export default function App() {
@@ -28,6 +33,8 @@ export default function App() {
   const [expandedDept, setExpandedDept] = useState<string | null>('Design');
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [portfolioDialogOpen, setPortfolioDialogOpen] = useState(false);
+  const [jobDetailsOpen, setJobDetailsOpen] = useState(false);
 
   const departments = ['All', 'Design', 'Development', 'Marketing', 'Strategy'];
 
@@ -39,6 +46,30 @@ export default function App() {
       location: 'Remote',
       type: 'Internship',
       department: 'Design',
+      fullDescription: 'Join our Design team as a UI/UX Designer Intern and help shape the future of digital experiences. You\'ll work alongside our creative team to design intuitive, beautiful interfaces that delight users and drive business results.',
+      responsibilities: [
+        'Design wireframes, mockups, and prototypes using Figma and other design tools',
+        'Collaborate with developers to ensure pixel-perfect implementation',
+        'Conduct user research and usability testing to inform design decisions',
+        'Create and maintain design systems and component libraries',
+        'Participate in design critiques and provide constructive feedback',
+        'Stay updated with the latest design trends and best practices'
+      ],
+      qualifications: [
+        'Currently pursuing or recently completed a degree in Design, HCI, or related field',
+        'Strong portfolio demonstrating UI/UX design skills',
+        'Proficiency in Figma, Adobe Creative Suite, or similar tools',
+        'Understanding of user-centered design principles',
+        'Good communication and collaboration skills',
+        'Passion for creating exceptional user experiences'
+      ],
+      benefits: [
+        'Mentorship from experienced designers',
+        'Flexible remote work environment',
+        'Access to design tools and resources',
+        'Opportunity for full-time conversion',
+        'Collaborative and creative work culture'
+      ]
     },
     {
       title: 'Brand & Visual Designer',
@@ -47,6 +78,30 @@ export default function App() {
       location: 'On-site',
       type: 'Full-time',
       department: 'Design',
+      fullDescription: 'We\'re seeking a talented Brand & Visual Designer to craft compelling visual identities and brand experiences for our diverse client portfolio. This role combines strategic thinking with exceptional design execution.',
+      responsibilities: [
+        'Develop comprehensive brand identities from concept to delivery',
+        'Create visual assets for marketing campaigns across multiple channels',
+        'Design brand guidelines and ensure consistent application',
+        'Collaborate with clients to understand their vision and goals',
+        'Lead presentations and defend design decisions',
+        'Manage multiple projects simultaneously while maintaining quality'
+      ],
+      qualifications: [
+        '3-5 years of experience in brand design or visual identity',
+        'Strong portfolio showcasing brand work and visual design',
+        'Expert knowledge of Adobe Creative Suite',
+        'Experience with motion graphics and video editing is a plus',
+        'Excellent typography and layout skills',
+        'Ability to work independently and as part of a team'
+      ],
+      benefits: [
+        'Competitive salary and performance bonuses',
+        'Health insurance and wellness programs',
+        'Professional development opportunities',
+        'Creative studio environment',
+        'Work with high-profile clients'
+      ]
     },
     {
       title: 'Frontend Developer',
@@ -55,6 +110,30 @@ export default function App() {
       location: 'Remote',
       type: 'Internship',
       department: 'Development',
+      fullDescription: 'Join our Development team as a Frontend Developer Intern and build cutting-edge web applications using modern technologies. You\'ll gain hands-on experience with React, Next.js, and industry best practices.',
+      responsibilities: [
+        'Develop responsive web applications using React and Next.js',
+        'Write clean, maintainable, and well-documented code',
+        'Collaborate with designers to implement pixel-perfect UIs',
+        'Optimize applications for maximum performance',
+        'Participate in code reviews and team discussions',
+        'Debug and troubleshoot issues across browsers and devices'
+      ],
+      qualifications: [
+        'Pursuing a degree in Computer Science or related field',
+        'Strong foundation in HTML, CSS, and JavaScript',
+        'Familiarity with React or similar frontend frameworks',
+        'Understanding of responsive design principles',
+        'Git version control experience',
+        'Eagerness to learn and grow as a developer'
+      ],
+      benefits: [
+        'Remote work flexibility',
+        'Mentorship from senior developers',
+        'Exposure to modern tech stack',
+        'Real-world project experience',
+        'Potential for full-time employment'
+      ]
     },
     {
       title: 'AI Engineer',
@@ -63,6 +142,30 @@ export default function App() {
       location: 'Hybrid',
       type: 'Full-time',
       department: 'Development',
+      fullDescription: 'We\'re looking for an innovative AI Engineer to help us integrate artificial intelligence and machine learning into our products. You\'ll work on exciting projects that push the boundaries of what\'s possible with AI.',
+      responsibilities: [
+        'Design and implement AI-powered features and workflows',
+        'Integrate machine learning models into production applications',
+        'Optimize AI algorithms for performance and accuracy',
+        'Collaborate with product teams to identify AI opportunities',
+        'Stay current with latest AI/ML research and technologies',
+        'Build and maintain AI infrastructure and pipelines'
+      ],
+      qualifications: [
+        '3+ years of experience in AI/ML engineering',
+        'Strong programming skills in Python and/or JavaScript',
+        'Experience with ML frameworks (TensorFlow, PyTorch, etc.)',
+        'Knowledge of NLP, computer vision, or generative AI',
+        'Understanding of cloud platforms (AWS, GCP, or Azure)',
+        'Strong problem-solving and analytical skills'
+      ],
+      benefits: [
+        'Competitive compensation package',
+        'Hybrid work model (2-3 days in office)',
+        'Latest hardware and tools',
+        'Conference and training budget',
+        'Work on cutting-edge AI projects'
+      ]
     },
     {
       title: 'Social Media Strategist',
@@ -71,6 +174,30 @@ export default function App() {
       location: 'Remote',
       type: 'Internship',
       department: 'Marketing',
+      fullDescription: 'Join our Marketing team as a Social Media Strategist Intern and help create engaging content that resonates with audiences across platforms. You\'ll learn to develop data-driven social strategies for leading brands.',
+      responsibilities: [
+        'Develop and execute social media content calendars',
+        'Create engaging posts, stories, and multimedia content',
+        'Monitor social media trends and audience engagement',
+        'Analyze campaign performance and provide insights',
+        'Engage with community members and respond to comments',
+        'Collaborate with design team on visual assets'
+      ],
+      qualifications: [
+        'Currently pursuing degree in Marketing, Communications, or related field',
+        'Strong understanding of major social media platforms',
+        'Excellent writing and communication skills',
+        'Creative mindset with attention to detail',
+        'Basic knowledge of social media analytics',
+        'Familiarity with content creation tools'
+      ],
+      benefits: [
+        'Remote work flexibility',
+        'Hands-on experience with real campaigns',
+        'Mentorship from marketing professionals',
+        'Portfolio-building opportunities',
+        'Collaborative team environment'
+      ]
     },
     {
       title: 'Digital Marketing Executive',
@@ -79,6 +206,30 @@ export default function App() {
       location: 'On-site',
       type: 'Full-time',
       department: 'Marketing',
+      fullDescription: 'We\'re seeking an experienced Digital Marketing Executive to drive our performance marketing initiatives. You\'ll lead multi-channel campaigns that deliver measurable results and business growth.',
+      responsibilities: [
+        'Plan and execute digital marketing campaigns across channels',
+        'Manage SEO/SEM strategies to improve organic and paid search performance',
+        'Analyze campaign metrics and optimize for ROI',
+        'Develop and manage marketing budgets',
+        'Lead email marketing and automation workflows',
+        'Collaborate with content and design teams on campaign assets'
+      ],
+      qualifications: [
+        '3-5 years of digital marketing experience',
+        'Proven track record in performance marketing and SEO',
+        'Experience with Google Analytics, Google Ads, and marketing automation tools',
+        'Strong analytical and data interpretation skills',
+        'Excellent project management abilities',
+        'Certifications in Google Ads or Analytics preferred'
+      ],
+      benefits: [
+        'Competitive salary with performance incentives',
+        'Health and wellness benefits',
+        'Professional development budget',
+        'Modern office environment',
+        'Career advancement opportunities'
+      ]
     },
     {
       title: 'Project Coordinator',
@@ -87,6 +238,30 @@ export default function App() {
       location: 'Hybrid',
       type: 'Internship',
       department: 'Strategy',
+      fullDescription: 'Join our Strategy team as a Project Coordinator Intern and gain experience managing cross-functional projects. You\'ll learn agile methodologies while coordinating deliverables across design, development, and client teams.',
+      responsibilities: [
+        'Coordinate project timelines and deliverables',
+        'Facilitate team meetings and agile ceremonies',
+        'Track project progress and update stakeholders',
+        'Maintain project documentation and resources',
+        'Support team members with scheduling and coordination',
+        'Help identify and resolve project blockers'
+      ],
+      qualifications: [
+        'Pursuing degree in Business, Management, or related field',
+        'Strong organizational and multitasking skills',
+        'Excellent communication and interpersonal abilities',
+        'Familiarity with project management tools (Asana, Jira, etc.)',
+        'Detail-oriented with problem-solving mindset',
+        'Interest in learning agile methodologies'
+      ],
+      benefits: [
+        'Hybrid work arrangement',
+        'Cross-functional team exposure',
+        'Project management training',
+        'Professional skill development',
+        'Path to full-time role'
+      ]
     },
     {
       title: 'Business Development Executive',
@@ -95,6 +270,30 @@ export default function App() {
       location: 'On-site',
       type: 'Full-time',
       department: 'Strategy',
+      fullDescription: 'We\'re looking for a dynamic Business Development Executive to expand our client portfolio and drive revenue growth. You\'ll identify opportunities, build relationships, and close deals with leading organizations.',
+      responsibilities: [
+        'Identify and pursue new business opportunities',
+        'Build and maintain relationships with prospective clients',
+        'Develop proposals and presentations for pitches',
+        'Negotiate contracts and close deals',
+        'Collaborate with delivery teams to ensure client satisfaction',
+        'Track pipeline and forecast revenue'
+      ],
+      qualifications: [
+        '3-5 years of B2B sales or business development experience',
+        'Proven track record of meeting or exceeding sales targets',
+        'Strong presentation and negotiation skills',
+        'Experience in tech, design, or digital services industry preferred',
+        'CRM proficiency (Salesforce, HubSpot, etc.)',
+        'Self-motivated with entrepreneurial mindset'
+      ],
+      benefits: [
+        'Base salary plus commission structure',
+        'Health insurance and benefits package',
+        'Professional networking opportunities',
+        'Leadership development programs',
+        'High-growth environment'
+      ]
     },
   ];
 
@@ -114,20 +313,95 @@ export default function App() {
     setDialogOpen(true);
   };
 
-  const handlePortfolioClick = () => {
-    setSelectedJob(null); // No specific job selected
-    setDialogOpen(true);
+  const handleViewDetails = (job: Job) => {
+    setSelectedJob(job);
+    setJobDetailsOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission
-    if (selectedJob) {
-      console.log('Application submitted for:', selectedJob.title);
-    } else {
-      console.log('Portfolio submission received');
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const resumeFile = formData.get('resume') as File;
+
+    // Construct the text content for the email
+    const textContent = `
+      Job Application for ${selectedJob?.title}
+      First Name: ${formData.get('firstName')}
+      Last Name: ${formData.get('lastName')}
+      Email: ${formData.get('email')}
+      Phone: ${formData.get('phone')}
+      Portfolio/LinkedIn: ${formData.get('portfolio') || 'N/A'}
+      Cover Letter: ${formData.get('coverLetter')}
+    `;
+
+    // Prepare FormData for the backend
+    const emailData = new FormData();
+    emailData.append('to', 'jobs@yourcompany.com'); // Replace with your company email
+    emailData.append('subject', `Job Application for ${selectedJob?.title}`);
+    emailData.append('text', textContent);
+    if (resumeFile && resumeFile.size > 0) {
+      emailData.append('attachments', resumeFile);
     }
-    setDialogOpen(false);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/email/send`, {
+        method: 'POST',
+        body: emailData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit application');
+      }
+
+      console.log('Application submitted for:', selectedJob?.title);
+      setDialogOpen(false);
+    } catch (error) {
+      console.error('Failed to send application:', error);
+      alert('Failed to submit application. Please try again.');
+    }
+  };
+
+  const handlePortfolioSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const portfolioFile = formData.get('portfolioFile') as File;
+
+    // Construct the text content for the email
+    const textContent = `
+      Portfolio Submission
+      Name: ${formData.get('portfolioName')}
+      Email: ${formData.get('portfolioEmail')}
+      Portfolio URL: ${formData.get('portfolioUrl') || 'N/A'}
+      Message: ${formData.get('portfolioMessage') || 'N/A'}
+    `;
+
+    // Prepare FormData for the backend
+    const emailData = new FormData();
+    emailData.append('to', 'jobs@yourcompany.com'); // Replace with your company email
+    emailData.append('subject', 'Portfolio Submission');
+    emailData.append('text', textContent);
+    if (portfolioFile && portfolioFile.size > 0) {
+      emailData.append('attachments', portfolioFile);
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/email/send`, {
+        method: 'POST',
+        body: emailData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit portfolio');
+      }
+
+      console.log('Portfolio submitted');
+      setPortfolioDialogOpen(false);
+    } catch (error) {
+      console.error('Failed to send portfolio:', error);
+      alert('Failed to submit portfolio. Please try again.');
+    }
   };
 
   return (
@@ -135,13 +409,21 @@ export default function App() {
       {/* Hero Section */}
       <section className="relative py-20 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
+          {/* Back to Home Button */}
+          <Link
+            to="https://www.virtualtechx.com/home-1.html" // Replace with your homepage route or URL (e.g., 'https://yourcompany.com')
+            className="absolute top-4 left-4 flex items-center gap-2 px-4 py-2 bg-black border border-zinc-800 rounded-full text-white hover:bg-zinc-800 hover:border-[#FFAC3E] transition-all duration-300"
+          >
+            <Home className="w-5 h-5 text-[#FFAC3E]" />
+            <span className="text-sm">Back to Home</span>
+          </Link>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-black border border-zinc-800 rounded-full mb-6">
               <Briefcase className="w-4 h-4 text-[#FFAC3E]" />
               <span className="text-sm text-zinc-400">We're Hiring</span>
             </div>
@@ -168,7 +450,7 @@ export default function App() {
                 className={`px-6 py-2.5 rounded-full transition-all duration-300 ${
                   activeFilter === dept
                     ? 'bg-[#FFAC3E] text-black'
-                    : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800'
+                    : 'bg-black text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800'
                 }`}
               >
                 {dept}
@@ -190,12 +472,12 @@ export default function App() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden hover:border-[#FFAC3E]/30 transition-all duration-300"
+                  className="bg-black/50 border border-zinc-800 rounded-2xl overflow-hidden hover:border-[#FFAC3E]/30 transition-all duration-300"
                 >
                   {/* Department Header */}
                   <button
                     onClick={() => setExpandedDept(expandedDept === dept ? null : dept)}
-                    className="w-full px-8 py-6 flex items-center justify-between hover:bg-zinc-900/70 transition-colors"
+                    className="w-full px-8 py-6 flex items-center justify-between hover:bg-black/70 transition-colors"
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-[#FFAC3E]/10 border border-[#FFAC3E]/30 rounded-lg flex items-center justify-center">
@@ -228,7 +510,7 @@ export default function App() {
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {deptJobs.map((job, index) => (
-                          <JobCard key={index} job={job} onApply={handleApply} />
+                          <JobCard key={index} job={job} onApply={handleApply} onViewDetails={handleViewDetails} />
                         ))}
                       </div>
                     </motion.div>
@@ -240,7 +522,7 @@ export default function App() {
             // Filtered Grid View
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredJobs.map((job, index) => (
-                <JobCard key={index} job={job} onApply={handleApply} />
+                <JobCard key={index} job={job} onApply={handleApply} onViewDetails={handleViewDetails} />
               ))}
             </div>
           )}
@@ -263,7 +545,7 @@ export default function App() {
               We're always looking for creative minds. Send us your portfolio and let's talk.
             </p>
             <Button 
-              onClick={handlePortfolioClick} // Add onClick handler
+              onClick={() => setPortfolioDialogOpen(true)}
               className="bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black px-8 py-6 border-0 group"
             >
               Send Your Portfolio
@@ -275,15 +557,13 @@ export default function App() {
 
       {/* Application Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-2xl">
+        <DialogContent className="bg-black text-white border-zinc-800 max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-white" style={{ fontSize: '1.5rem' }}>
-              {selectedJob ? `Apply for ${selectedJob.title}` : 'Portfolio Submission'}
+              Apply for {selectedJob?.title}
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
-              {selectedJob 
-                ? `${selectedJob.level} • ${selectedJob.department} Team` 
-                : 'Submit your portfolio to join our creative team'}
+              {selectedJob?.level} • {selectedJob?.department} Team
             </DialogDescription>
           </DialogHeader>
           
@@ -293,18 +573,20 @@ export default function App() {
                 <Label htmlFor="firstName" className="text-white">First Name</Label>
                 <Input
                   id="firstName"
+                  name="firstName"
                   placeholder="John"
                   required
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+                  className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName" className="text-white">Last Name</Label>
                 <Input
                   id="lastName"
+                  name="lastName"
                   placeholder="Doe"
                   required
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+                  className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
                 />
               </div>
             </div>
@@ -313,10 +595,11 @@ export default function App() {
               <Label htmlFor="email" className="text-white">Email Address</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="john.doe@example.com"
                 required
-                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
               />
             </div>
 
@@ -324,10 +607,11 @@ export default function App() {
               <Label htmlFor="phone" className="text-white">Phone Number</Label>
               <Input
                 id="phone"
+                name="phone"
                 type="tel"
                 placeholder="+1 (555) 000-0000"
                 required
-                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
               />
             </div>
 
@@ -335,10 +619,10 @@ export default function App() {
               <Label htmlFor="portfolio" className="text-white">Portfolio/LinkedIn URL</Label>
               <Input
                 id="portfolio"
+                name="portfolio"
                 type="url"
                 placeholder="https://portfolio.com"
-                required={selectedJob === null} // Make required for portfolio submissions
-                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
               />
             </div>
 
@@ -346,10 +630,11 @@ export default function App() {
               <Label htmlFor="resume" className="text-white">Resume (PDF/DOC)</Label>
               <Input
                 id="resume"
+                name="resume"
                 type="file"
                 accept=".pdf,.doc,.docx"
                 required
-                className="bg-zinc-900 border-zinc-800 text-white file:text-white file:bg-[#FFAC3E]/20 file:border-[#FFAC3E]/30 focus:border-[#FFAC3E]"
+                className="bg-black border-zinc-800 text-white file:text-white file:bg-[#FFAC3E]/20 file:border-[#FFAC3E]/30 focus:border-[#FFAC3E]"
               />
             </div>
 
@@ -357,12 +642,11 @@ export default function App() {
               <Label htmlFor="coverLetter" className="text-white">Cover Letter</Label>
               <Textarea
                 id="coverLetter"
-                placeholder={selectedJob 
-                  ? `Tell us why you're a great fit for the ${selectedJob.title} role...` 
-                  : 'Tell us about yourself and why you want to join our team...'}
+                name="coverLetter"
+                placeholder="Tell us why you're a great fit for this role..."
                 rows={6}
                 required
-                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
               />
             </div>
 
@@ -371,13 +655,13 @@ export default function App() {
                 type="submit"
                 className="flex-1 bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black border-0"
               >
-                {selectedJob ? 'Submit Application' : 'Submit Portfolio'}
+                Submit Application
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setDialogOpen(false)}
-                className="bg-transparent border-zinc-800 hover:bg-zinc-900 text-white"
+                className="bg-transparent border-zinc-800 hover:bg-black text-white"
               >
                 Cancel
               </Button>
@@ -385,11 +669,205 @@ export default function App() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Portfolio Submission Dialog */}
+      <Dialog open={portfolioDialogOpen} onOpenChange={setPortfolioDialogOpen}>
+        <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white" style={{ fontSize: '1.5rem' }}>
+              Send Your Portfolio
+            </DialogTitle>
+            <DialogDescription className="text-zinc-400">
+              Share your work with us. We'll get back to you soon.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form className="space-y-4" onSubmit={handlePortfolioSubmit}>
+            <div className="space-y-2">
+              <Label htmlFor="portfolioName" className="text-white">Full Name</Label>
+              <Input
+                id="portfolioName"
+                name="portfolioName"
+                type="text"
+                placeholder="John Doe"
+                required
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="portfolioEmail" className="text-white">Email</Label>
+              <Input
+                id="portfolioEmail"
+                name="portfolioEmail"
+                type="email"
+                placeholder="john@example.com"
+                required
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="portfolioUrl" className="text-white">Portfolio URL</Label>
+              <Input
+                id="portfolioUrl"
+                name="portfolioUrl"
+                type="url"
+                placeholder="https://yourportfolio.com"
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="portfolioFile" className="text-white">Portfolio / Resume (Optional)</Label>
+              <Input
+                id="portfolioFile"
+                name="portfolioFile"
+                type="file"
+                accept=".pdf,.doc,.docx"
+                className="bg-black border-zinc-800 text-white file:text-white file:bg-zinc-800 file:border-0 file:rounded file:px-3 file:py-1 file:mr-3 hover:file:bg-zinc-700 focus:border-[#FFAC3E]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="portfolioMessage" className="text-white">Message</Label>
+              <Textarea
+                id="portfolioMessage"
+                name="portfolioMessage"
+                placeholder="Tell us a bit about yourself and what you're looking for..."
+                rows={4}
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="submit"
+                className="flex-1 bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black border-0"
+              >
+                Send Portfolio
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setPortfolioDialogOpen(false)}
+                className="bg-transparent border-zinc-800 hover:bg-black text-white"
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Job Details Dialog */}
+      <Dialog open={jobDetailsOpen} onOpenChange={setJobDetailsOpen}>
+        <DialogContent className="bg-white border-zinc-200 text-white max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <DialogTitle className="text-black mb-2" style={{ fontSize: '1.75rem' }}>
+                  {selectedJob?.title}
+                </DialogTitle>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  <span className="inline-block px-3 py-1 bg-[#FFAC3E]/10 border border-[#FFAC3E]/30 rounded-full text-[#FFAC3E]">
+                    {selectedJob?.level}
+                  </span>
+                  <span className="flex items-center gap-1 text-zinc-600">
+                    <MapPin className="w-4 h-4" />
+                    {selectedJob?.location}
+                  </span>
+                  <span className="flex items-center gap-1 text-zinc-600">
+                    <Clock className="w-4 h-4" />
+                    {selectedJob?.type}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </DialogHeader>
+
+          <div className="space-y-6 mt-6">
+            {/* Full Description */}
+            {selectedJob?.fullDescription && (
+              <div>
+                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>About the Role</h3>
+                <p className="text-zinc-700 leading-relaxed">{selectedJob.fullDescription}</p>
+              </div>
+            )}
+
+            {/* Responsibilities */}
+            {selectedJob?.responsibilities && selectedJob.responsibilities.length > 0 && (
+              <div>
+                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>Key Responsibilities</h3>
+                <ul className="space-y-2">
+                  {selectedJob.responsibilities.map((item, index) => (
+                    <li key={index} className="flex gap-3 text-zinc-700">
+                      <span className="text-[#FFAC3E] mt-1">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Qualifications */}
+            {selectedJob?.qualifications && selectedJob.qualifications.length > 0 && (
+              <div>
+                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>Qualifications</h3>
+                <ul className="space-y-2">
+                  {selectedJob.qualifications.map((item, index) => (
+                    <li key={index} className="flex gap-3 text-zinc-700">
+                      <span className="text-[#FFAC3E] mt-1">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Benefits */}
+            {selectedJob?.benefits && selectedJob.benefits.length > 0 && (
+              <div>
+                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>What We Offer</h3>
+                <ul className="space-y-2">
+                  {selectedJob.benefits.map((item, index) => (
+                    <li key={index} className="flex gap-3 text-zinc-700">
+                      <span className="text-[#FFAC3E] mt-1">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-3 pt-6 mt-6 border-t border-zinc-200">
+            <Button
+              onClick={() => {
+                setJobDetailsOpen(false);
+                setDialogOpen(true);
+              }}
+              className="flex-1 bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black border-0"
+            >
+              Apply for this Position
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setJobDetailsOpen(false)}
+              className="bg-transparent border-zinc-300 hover:bg-zinc-100 text-black"
+            >
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-function JobCard({ job, onApply }: { job: Job; onApply: (job: Job) => void }) {
+function JobCard({ job, onApply, onViewDetails }: { job: Job; onApply: (job: Job) => void; onViewDetails: (job: Job) => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -426,13 +904,22 @@ function JobCard({ job, onApply }: { job: Job; onApply: (job: Job) => void }) {
         </div>
       </div>
 
-      <Button
-        onClick={() => onApply(job)}
-        className="w-full bg-transparent border-2 border-zinc-800 hover:border-[#FFAC3E] hover:bg-[#FFAC3E] hover:text-black text-white transition-all duration-300 group/btn"
-      >
-        Apply Now
-        <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-      </Button>
+      <div className="flex gap-3">
+        <Button
+          onClick={() => onViewDetails(job)}
+          variant="outline"
+          className="flex-1 bg-transparent border-2 border-zinc-800 hover:border-white hover:bg-zinc-800 text-white transition-all duration-300"
+        >
+          View Details
+        </Button>
+        <Button
+          onClick={() => onApply(job)}
+          className="flex-1 bg-transparent border-2 border-[#FFAC3E]/50 hover:border-[#FFAC3E] hover:bg-[#FFAC3E] hover:text-black text-[#FFAC3E] transition-all duration-300 group/btn"
+        >
+          Apply
+          <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+        </Button>
+      </div>
     </motion.div>
   );
 }
