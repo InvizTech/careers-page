@@ -35,7 +35,9 @@ interface Job {
   benefits?: string[];
 }
 const COMPANY_EMAIL = "tushar@virtualtechx.com";
-const API_URL = process.env.REACT_APP_API_URL || 'https://express-nodemailer-server.vercel.app';
+const API_URL =
+  process.env.REACT_APP_API_URL ||
+  "https://express-nodemailer-server.vercel.app";
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -850,131 +852,141 @@ export default function App() {
 
       {/* Job Details Dialog */}
       <Dialog open={jobDetailsOpen} onOpenChange={setJobDetailsOpen}>
-        <DialogContent className="bg-white border-zinc-200 text-white max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <div className="flex items-start justify-between mb-2">
-              <div>
-                <DialogTitle
-                  className="text-black mb-2"
-                  style={{ fontSize: "1.75rem" }}
-                >
-                  {selectedJob?.title}
-                </DialogTitle>
-                <div className="flex flex-wrap gap-3 text-sm">
-                  <span className="inline-block px-3 py-1 bg-[#FFAC3E]/10 border border-[#FFAC3E]/30 rounded-full text-[#FFAC3E]">
-                    {selectedJob?.level}
-                  </span>
-                  <span className="flex items-center gap-1 text-zinc-600">
-                    <MapPin className="w-4 h-4" />
-                    {selectedJob?.location}
-                  </span>
-                  <span className="flex items-center gap-1 text-zinc-600">
-                    <Clock className="w-4 h-4" />
-                    {selectedJob?.type}
-                  </span>
+        <DialogContent
+          className="bg-zinc-950 border border-zinc-800 text-white p-6 overflow-hidden"
+          style={{ width: "1500px", maxWidth: "90vw", height: "90vh" }}
+        >
+          <div className="flex flex-col h-full">
+            {/* Header */}
+            <DialogHeader className="flex-shrink-0 mb-4">
+              <div className="flex items-start justify-between">
+                <div>
+                  <DialogTitle className="text-white mb-2 text-xl">
+                    {selectedJob?.title}
+                  </DialogTitle>
+                  <div className="flex flex-wrap gap-3 text-xs text-zinc-400">
+                    <span className="inline-block px-3 py-1 bg-[#FFAC3E]/10 border border-[#FFAC3E]/30 rounded-full text-[#FFAC3E]">
+                      {selectedJob?.level}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-4 h-4" />
+                      {selectedJob?.location}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {selectedJob?.type}
+                    </span>
+                  </div>
                 </div>
+              </div>
+            </DialogHeader>
+
+            {/* Main Content Section (Scrollable) */}
+            <div className="flex flex-1 gap-8 overflow-y-auto pr-3">
+              {/* Left Column */}
+              <div className="flex-1 space-y-5 text-sm leading-relaxed">
+                {/* Full Description */}
+                {selectedJob?.fullDescription && (
+                  <section>
+                    <h3 className="text-white mb-2 text-base font-semibold">
+                      About the Role
+                    </h3>
+                    <p className="text-zinc-300">
+                      {selectedJob.fullDescription}
+                    </p>
+                  </section>
+                )}
+
+                {/* Responsibilities */}
+                {selectedJob?.responsibilities?.length > 0 && (
+                  <section>
+                    <h3 className="text-white mb-2 text-base font-semibold">
+                      Key Responsibilities
+                    </h3>
+                    <ul className="space-y-1">
+                      {selectedJob.responsibilities.map((item, index) => (
+                        <li key={index} className="flex gap-2 text-zinc-300">
+                          <span className="text-[#FFAC3E]">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {/* Qualifications */}
+                {selectedJob?.qualifications?.length > 0 && (
+                  <section>
+                    <h3 className="text-white mb-2 text-base font-semibold">
+                      Qualifications
+                    </h3>
+                    <ul className="space-y-1">
+                      {selectedJob.qualifications.map((item, index) => (
+                        <li key={index} className="flex gap-2 text-zinc-300">
+                          <span className="text-[#FFAC3E]">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+
+                {/* Benefits */}
+                {selectedJob?.benefits?.length > 0 && (
+                  <section>
+                    <h3 className="text-white mb-2 text-base font-semibold">
+                      What We Offer
+                    </h3>
+                    <ul className="space-y-1">
+                      {selectedJob.benefits.map((item, index) => (
+                        <li key={index} className="flex gap-2 text-zinc-300">
+                          <span className="text-[#FFAC3E]">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
+              </div>
+
+              {/* Right Column (optional — could show metadata or summary) */}
+              <aside className="w-64 flex-shrink-0 hidden xl:block">
+                <div className="p-4 rounded-xl bg-zinc-900/50">
+                  <h4 className="text-[#FFAC3E] text-sm mb-2 font-semibold">
+                    Details
+                  </h4>
+                  <p className="text-zinc-400 text-sm">
+                    <strong>Role:</strong> {selectedJob?.level} <br />
+                    <strong>Type:</strong> {selectedJob?.type} <br />
+                    <strong>Location:</strong> {selectedJob?.location}
+                  </p>
+                </div>
+              </aside>
+            </div>
+
+            {/* Footer (Fixed) */}
+            <div className="flex-shrink-0 mt-6 border-t border-zinc-800 pt-6">
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => {
+                    setJobDetailsOpen(false);
+                    setDialogOpen(true);
+                  }}
+                  className="flex-1 bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black border-0"
+                >
+                  Apply for this Position
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setJobDetailsOpen(false)}
+                  className="bg-transparent border-zinc-800 hover:bg-zinc-800 text-white"
+                >
+                  Close
+                </Button>
               </div>
             </div>
-          </DialogHeader>
-
-          <div className="space-y-6 mt-6">
-            {/* Full Description */}
-            {selectedJob?.fullDescription && (
-              <div>
-                <h3
-                  className="text-white mb-3"
-                  style={{ fontSize: "1.125rem" }}
-                >
-                  About the Role
-                </h3>
-                <p className="text-zinc-700 leading-relaxed">
-                  {selectedJob.fullDescription}
-                </p>
-              </div>
-            )}
-
-            {/* Responsibilities */}
-            {selectedJob?.responsibilities &&
-              selectedJob.responsibilities.length > 0 && (
-                <div>
-                  <h3
-                    className="text-white mb-3"
-                    style={{ fontSize: "1.125rem" }}
-                  >
-                    Key Responsibilities
-                  </h3>
-                  <ul className="space-y-2">
-                    {selectedJob.responsibilities.map((item, index) => (
-                      <li key={index} className="flex gap-3 text-zinc-700">
-                        <span className="text-[#FFAC3E] mt-1">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-            {/* Qualifications */}
-            {selectedJob?.qualifications &&
-              selectedJob.qualifications.length > 0 && (
-                <div>
-                  <h3
-                    className="text-white mb-3"
-                    style={{ fontSize: "1.125rem" }}
-                  >
-                    Qualifications
-                  </h3>
-                  <ul className="space-y-2">
-                    {selectedJob.qualifications.map((item, index) => (
-                      <li key={index} className="flex gap-3 text-zinc-700">
-                        <span className="text-[#FFAC3E] mt-1">•</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-            {/* Benefits */}
-            {selectedJob?.benefits && selectedJob.benefits.length > 0 && (
-              <div>
-                <h3
-                  className="text-white mb-3"
-                  style={{ fontSize: "1.125rem" }}
-                >
-                  What We Offer
-                </h3>
-                <ul className="space-y-2">
-                  {selectedJob.benefits.map((item, index) => (
-                    <li key={index} className="flex gap-3 text-zinc-700">
-                      <span className="text-[#FFAC3E] mt-1">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <div className="flex gap-3 pt-6 mt-6 border-t border-zinc-200">
-            <Button
-              onClick={() => {
-                setJobDetailsOpen(false);
-                setDialogOpen(true);
-              }}
-              className="flex-1 bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black border-0"
-            >
-              Apply for this Position
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setJobDetailsOpen(false)}
-              className="bg-transparent border-zinc-300 hover:bg-zinc-100 text-black"
-            >
-              Close
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
