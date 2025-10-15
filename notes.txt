@@ -1,0 +1,3 @@
+merge cover letter & resume in single array - attachments
+
+selectedjob title dynamic 

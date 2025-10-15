@@ -1,7 +1,14 @@
-import { useState } from 'react';
-import { motion } from 'motion/react';
-import { ArrowRight, Briefcase, MapPin, Clock, ChevronDown, Home } from 'lucide-react'; // Added Home icon
-import { Button } from './components/ui/button';
+import { useState } from "react";
+import { motion } from "motion/react";
+import {
+  ArrowRight,
+  Briefcase,
+  MapPin,
+  Clock,
+  ChevronDown,
+  Home,
+} from "lucide-react";
+import { Button } from "./components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,11 +16,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './components/ui/dialog';
-import { Input } from './components/ui/input';
-import { Label } from './components/ui/label';
-import { Textarea } from './components/ui/textarea';
-import { Link } from 'react-router-dom'; // Added for navigation
+} from "./components/ui/dialog";
+import { Input } from "./components/ui/input";
+import { Label } from "./components/ui/label";
+import { Textarea } from "./components/ui/textarea";
+import { Link } from "react-router-dom";
 
 interface Job {
   title: string;
@@ -28,284 +35,302 @@ interface Job {
   benefits?: string[];
 }
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function App() {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const [expandedDept, setExpandedDept] = useState<string | null>('Design');
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [expandedDept, setExpandedDept] = useState<string | null>("Design");
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [portfolioDialogOpen, setPortfolioDialogOpen] = useState(false);
   const [jobDetailsOpen, setJobDetailsOpen] = useState(false);
 
-  const departments = ['All', 'Design', 'Development', 'Marketing', 'Strategy'];
+  const departments = ["All", "Design", "Development", "Marketing", "Strategy"];
 
   const jobs: Job[] = [
     {
-      title: 'UI/UX Designer',
-      level: 'Intern',
-      description: 'Create next-gen user experiences with Figma, motion UI, and AI-driven prototypes.',
-      location: 'Remote',
-      type: 'Internship',
-      department: 'Design',
-      fullDescription: 'Join our Design team as a UI/UX Designer Intern and help shape the future of digital experiences. You\'ll work alongside our creative team to design intuitive, beautiful interfaces that delight users and drive business results.',
+      title: "UI/UX Designer",
+      level: "Intern",
+      description:
+        "Create next-gen user experiences with Figma, motion UI, and AI-driven prototypes.",
+      location: "Remote",
+      type: "Internship",
+      department: "Design",
+      fullDescription:
+        "Join our Design team as a UI/UX Designer Intern and help shape the future of digital experiences. You'll work alongside our creative team to design intuitive, beautiful interfaces that delight users and drive business results.",
       responsibilities: [
-        'Design wireframes, mockups, and prototypes using Figma and other design tools',
-        'Collaborate with developers to ensure pixel-perfect implementation',
-        'Conduct user research and usability testing to inform design decisions',
-        'Create and maintain design systems and component libraries',
-        'Participate in design critiques and provide constructive feedback',
-        'Stay updated with the latest design trends and best practices'
+        "Design wireframes, mockups, and prototypes using Figma and other design tools",
+        "Collaborate with developers to ensure pixel-perfect implementation",
+        "Conduct user research and usability testing to inform design decisions",
+        "Create and maintain design systems and component libraries",
+        "Participate in design critiques and provide constructive feedback",
+        "Stay updated with the latest design trends and best practices",
       ],
       qualifications: [
-        'Currently pursuing or recently completed a degree in Design, HCI, or related field',
-        'Strong portfolio demonstrating UI/UX design skills',
-        'Proficiency in Figma, Adobe Creative Suite, or similar tools',
-        'Understanding of user-centered design principles',
-        'Good communication and collaboration skills',
-        'Passion for creating exceptional user experiences'
+        "Currently pursuing or recently completed a degree in Design, HCI, or related field",
+        "Strong portfolio demonstrating UI/UX design skills",
+        "Proficiency in Figma, Adobe Creative Suite, or similar tools",
+        "Understanding of user-centered design principles",
+        "Good communication and collaboration skills",
+        "Passion for creating exceptional user experiences",
       ],
       benefits: [
-        'Mentorship from experienced designers',
-        'Flexible remote work environment',
-        'Access to design tools and resources',
-        'Opportunity for full-time conversion',
-        'Collaborative and creative work culture'
-      ]
+        "Mentorship from experienced designers",
+        "Flexible remote work environment",
+        "Access to design tools and resources",
+        "Opportunity for full-time conversion",
+        "Collaborative and creative work culture",
+      ],
     },
     {
-      title: 'Brand & Visual Designer',
-      level: 'Mid-Level',
-      description: 'Develop visual identities, campaigns, and brand systems for global clients.',
-      location: 'On-site',
-      type: 'Full-time',
-      department: 'Design',
-      fullDescription: 'We\'re seeking a talented Brand & Visual Designer to craft compelling visual identities and brand experiences for our diverse client portfolio. This role combines strategic thinking with exceptional design execution.',
+      title: "Brand & Visual Designer",
+      level: "Mid-Level",
+      description:
+        "Develop visual identities, campaigns, and brand systems for global clients.",
+      location: "On-site",
+      type: "Full-time",
+      department: "Design",
+      fullDescription:
+        "We're seeking a talented Brand & Visual Designer to craft compelling visual identities and brand experiences for our diverse client portfolio. This role combines strategic thinking with exceptional design execution.",
       responsibilities: [
-        'Develop comprehensive brand identities from concept to delivery',
-        'Create visual assets for marketing campaigns across multiple channels',
-        'Design brand guidelines and ensure consistent application',
-        'Collaborate with clients to understand their vision and goals',
-        'Lead presentations and defend design decisions',
-        'Manage multiple projects simultaneously while maintaining quality'
+        "Develop comprehensive brand identities from concept to delivery",
+        "Create visual assets for marketing campaigns across multiple channels",
+        "Design brand guidelines and ensure consistent application",
+        "Collaborate with clients to understand their vision and goals",
+        "Lead presentations and defend design decisions",
+        "Manage multiple projects simultaneously while maintaining quality",
       ],
       qualifications: [
-        '3-5 years of experience in brand design or visual identity',
-        'Strong portfolio showcasing brand work and visual design',
-        'Expert knowledge of Adobe Creative Suite',
-        'Experience with motion graphics and video editing is a plus',
-        'Excellent typography and layout skills',
-        'Ability to work independently and as part of a team'
+        "3-5 years of experience in brand design or visual identity",
+        "Strong portfolio showcasing brand work and visual design",
+        "Expert knowledge of Adobe Creative Suite",
+        "Experience with motion graphics and video editing is a plus",
+        "Excellent typography and layout skills",
+        "Ability to work independently and as part of a team",
       ],
       benefits: [
-        'Competitive salary and performance bonuses',
-        'Health insurance and wellness programs',
-        'Professional development opportunities',
-        'Creative studio environment',
-        'Work with high-profile clients'
-      ]
+        "Competitive salary and performance bonuses",
+        "Health insurance and wellness programs",
+        "Professional development opportunities",
+        "Creative studio environment",
+        "Work with high-profile clients",
+      ],
     },
     {
-      title: 'Frontend Developer',
-      level: 'Intern',
-      description: 'Work with React/Next.js to build interactive web experiences.',
-      location: 'Remote',
-      type: 'Internship',
-      department: 'Development',
-      fullDescription: 'Join our Development team as a Frontend Developer Intern and build cutting-edge web applications using modern technologies. You\'ll gain hands-on experience with React, Next.js, and industry best practices.',
+      title: "Frontend Developer",
+      level: "Intern",
+      description:
+        "Work with React/Next.js to build interactive web experiences.",
+      location: "Remote",
+      type: "Internship",
+      department: "Development",
+      fullDescription:
+        "Join our Development team as a Frontend Developer Intern and build cutting-edge web applications using modern technologies. You'll gain hands-on experience with React, Next.js, and industry best practices.",
       responsibilities: [
-        'Develop responsive web applications using React and Next.js',
-        'Write clean, maintainable, and well-documented code',
-        'Collaborate with designers to implement pixel-perfect UIs',
-        'Optimize applications for maximum performance',
-        'Participate in code reviews and team discussions',
-        'Debug and troubleshoot issues across browsers and devices'
+        "Develop responsive web applications using React and Next.js",
+        "Write clean, maintainable, and well-documented code",
+        "Collaborate with designers to implement pixel-perfect UIs",
+        "Optimize applications for maximum performance",
+        "Participate in code reviews and team discussions",
+        "Debug and troubleshoot issues across browsers and devices",
       ],
       qualifications: [
-        'Pursuing a degree in Computer Science or related field',
-        'Strong foundation in HTML, CSS, and JavaScript',
-        'Familiarity with React or similar frontend frameworks',
-        'Understanding of responsive design principles',
-        'Git version control experience',
-        'Eagerness to learn and grow as a developer'
+        "Pursuing a degree in Computer Science or related field",
+        "Strong foundation in HTML, CSS, and JavaScript",
+        "Familiarity with React or similar frontend frameworks",
+        "Understanding of responsive design principles",
+        "Git version control experience",
+        "Eagerness to learn and grow as a developer",
       ],
       benefits: [
-        'Remote work flexibility',
-        'Mentorship from senior developers',
-        'Exposure to modern tech stack',
-        'Real-world project experience',
-        'Potential for full-time employment'
-      ]
+        "Remote work flexibility",
+        "Mentorship from senior developers",
+        "Exposure to modern tech stack",
+        "Real-world project experience",
+        "Potential for full-time employment",
+      ],
     },
     {
-      title: 'AI Engineer',
-      level: 'Mid-Level',
-      description: 'Integrate AI and automation tools into digital products and experiences.',
-      location: 'Hybrid',
-      type: 'Full-time',
-      department: 'Development',
-      fullDescription: 'We\'re looking for an innovative AI Engineer to help us integrate artificial intelligence and machine learning into our products. You\'ll work on exciting projects that push the boundaries of what\'s possible with AI.',
+      title: "AI Engineer",
+      level: "Mid-Level",
+      description:
+        "Integrate AI and automation tools into digital products and experiences.",
+      location: "Hybrid",
+      type: "Full-time",
+      department: "Development",
+      fullDescription:
+        "We're looking for an innovative AI Engineer to help us integrate artificial intelligence and machine learning into our products. You'll work on exciting projects that push the boundaries of what's possible with AI.",
       responsibilities: [
-        'Design and implement AI-powered features and workflows',
-        'Integrate machine learning models into production applications',
-        'Optimize AI algorithms for performance and accuracy',
-        'Collaborate with product teams to identify AI opportunities',
-        'Stay current with latest AI/ML research and technologies',
-        'Build and maintain AI infrastructure and pipelines'
+        "Design and implement AI-powered features and workflows",
+        "Integrate machine learning models into production applications",
+        "Optimize AI algorithms for performance and accuracy",
+        "Collaborate with product teams to identify AI opportunities",
+        "Stay current with latest AI/ML research and technologies",
+        "Build and maintain AI infrastructure and pipelines",
       ],
       qualifications: [
-        '3+ years of experience in AI/ML engineering',
-        'Strong programming skills in Python and/or JavaScript',
-        'Experience with ML frameworks (TensorFlow, PyTorch, etc.)',
-        'Knowledge of NLP, computer vision, or generative AI',
-        'Understanding of cloud platforms (AWS, GCP, or Azure)',
-        'Strong problem-solving and analytical skills'
+        "3+ years of experience in AI/ML engineering",
+        "Strong programming skills in Python and/or JavaScript",
+        "Experience with ML frameworks (TensorFlow, PyTorch, etc.)",
+        "Knowledge of NLP, computer vision, or generative AI",
+        "Understanding of cloud platforms (AWS, GCP, or Azure)",
+        "Strong problem-solving and analytical skills",
       ],
       benefits: [
-        'Competitive compensation package',
-        'Hybrid work model (2-3 days in office)',
-        'Latest hardware and tools',
-        'Conference and training budget',
-        'Work on cutting-edge AI projects'
-      ]
+        "Competitive compensation package",
+        "Hybrid work model (2-3 days in office)",
+        "Latest hardware and tools",
+        "Conference and training budget",
+        "Work on cutting-edge AI projects",
+      ],
     },
     {
-      title: 'Social Media Strategist',
-      level: 'Intern',
-      description: 'Craft social campaigns that connect brands with their audiences.',
-      location: 'Remote',
-      type: 'Internship',
-      department: 'Marketing',
-      fullDescription: 'Join our Marketing team as a Social Media Strategist Intern and help create engaging content that resonates with audiences across platforms. You\'ll learn to develop data-driven social strategies for leading brands.',
+      title: "Social Media Strategist",
+      level: "Intern",
+      description:
+        "Craft social campaigns that connect brands with their audiences.",
+      location: "Remote",
+      type: "Internship",
+      department: "Marketing",
+      fullDescription:
+        "Join our Marketing team as a Social Media Strategist Intern and help create engaging content that resonates with audiences across platforms. You'll learn to develop data-driven social strategies for leading brands.",
       responsibilities: [
-        'Develop and execute social media content calendars',
-        'Create engaging posts, stories, and multimedia content',
-        'Monitor social media trends and audience engagement',
-        'Analyze campaign performance and provide insights',
-        'Engage with community members and respond to comments',
-        'Collaborate with design team on visual assets'
+        "Develop and execute social media content calendars",
+        "Create engaging posts, stories, and multimedia content",
+        "Monitor social media trends and audience engagement",
+        "Analyze campaign performance and provide insights",
+        "Engage with community members and respond to comments",
+        "Collaborate with design team on visual assets",
       ],
       qualifications: [
-        'Currently pursuing degree in Marketing, Communications, or related field',
-        'Strong understanding of major social media platforms',
-        'Excellent writing and communication skills',
-        'Creative mindset with attention to detail',
-        'Basic knowledge of social media analytics',
-        'Familiarity with content creation tools'
+        "Currently pursuing degree in Marketing, Communications, or related field",
+        "Strong understanding of major social media platforms",
+        "Excellent writing and communication skills",
+        "Creative mindset with attention to detail",
+        "Basic knowledge of social media analytics",
+        "Familiarity with content creation tools",
       ],
       benefits: [
-        'Remote work flexibility',
-        'Hands-on experience with real campaigns',
-        'Mentorship from marketing professionals',
-        'Portfolio-building opportunities',
-        'Collaborative team environment'
-      ]
+        "Remote work flexibility",
+        "Hands-on experience with real campaigns",
+        "Mentorship from marketing professionals",
+        "Portfolio-building opportunities",
+        "Collaborative team environment",
+      ],
     },
     {
-      title: 'Digital Marketing Executive',
-      level: 'Mid-Level',
-      description: 'Lead performance marketing and SEO campaigns for growth-driven results.',
-      location: 'On-site',
-      type: 'Full-time',
-      department: 'Marketing',
-      fullDescription: 'We\'re seeking an experienced Digital Marketing Executive to drive our performance marketing initiatives. You\'ll lead multi-channel campaigns that deliver measurable results and business growth.',
+      title: "Digital Marketing Executive",
+      level: "Mid-Level",
+      description:
+        "Lead performance marketing and SEO campaigns for growth-driven results.",
+      location: "On-site",
+      type: "Full-time",
+      department: "Marketing",
+      fullDescription:
+        "We're seeking an experienced Digital Marketing Executive to drive our performance marketing initiatives. You'll lead multi-channel campaigns that deliver measurable results and business growth.",
       responsibilities: [
-        'Plan and execute digital marketing campaigns across channels',
-        'Manage SEO/SEM strategies to improve organic and paid search performance',
-        'Analyze campaign metrics and optimize for ROI',
-        'Develop and manage marketing budgets',
-        'Lead email marketing and automation workflows',
-        'Collaborate with content and design teams on campaign assets'
+        "Plan and execute digital marketing campaigns across channels",
+        "Manage SEO/SEM strategies to improve organic and paid search performance",
+        "Analyze campaign metrics and optimize for ROI",
+        "Develop and manage marketing budgets",
+        "Lead email marketing and automation workflows",
+        "Collaborate with content and design teams on campaign assets",
       ],
       qualifications: [
-        '3-5 years of digital marketing experience',
-        'Proven track record in performance marketing and SEO',
-        'Experience with Google Analytics, Google Ads, and marketing automation tools',
-        'Strong analytical and data interpretation skills',
-        'Excellent project management abilities',
-        'Certifications in Google Ads or Analytics preferred'
+        "3-5 years of digital marketing experience",
+        "Proven track record in performance marketing and SEO",
+        "Experience with Google Analytics, Google Ads, and marketing automation tools",
+        "Strong analytical and data interpretation skills",
+        "Excellent project management abilities",
+        "Certifications in Google Ads or Analytics preferred",
       ],
       benefits: [
-        'Competitive salary with performance incentives',
-        'Health and wellness benefits',
-        'Professional development budget',
-        'Modern office environment',
-        'Career advancement opportunities'
-      ]
+        "Competitive salary with performance incentives",
+        "Health and wellness benefits",
+        "Professional development budget",
+        "Modern office environment",
+        "Career advancement opportunities",
+      ],
     },
     {
-      title: 'Project Coordinator',
-      level: 'Intern',
-      description: 'Collaborate with design and tech teams to manage agile workflows.',
-      location: 'Hybrid',
-      type: 'Internship',
-      department: 'Strategy',
-      fullDescription: 'Join our Strategy team as a Project Coordinator Intern and gain experience managing cross-functional projects. You\'ll learn agile methodologies while coordinating deliverables across design, development, and client teams.',
+      title: "Project Coordinator",
+      level: "Intern",
+      description:
+        "Collaborate with design and tech teams to manage agile workflows.",
+      location: "Hybrid",
+      type: "Internship",
+      department: "Strategy",
+      fullDescription:
+        "Join our Strategy team as a Project Coordinator Intern and gain experience managing cross-functional projects. You'll learn agile methodologies while coordinating deliverables across design, development, and client teams.",
       responsibilities: [
-        'Coordinate project timelines and deliverables',
-        'Facilitate team meetings and agile ceremonies',
-        'Track project progress and update stakeholders',
-        'Maintain project documentation and resources',
-        'Support team members with scheduling and coordination',
-        'Help identify and resolve project blockers'
+        "Coordinate project timelines and deliverables",
+        "Facilitate team meetings and agile ceremonies",
+        "Track project progress and update stakeholders",
+        "Maintain project documentation and resources",
+        "Support team members with scheduling and coordination",
+        "Help identify and resolve project blockers",
       ],
       qualifications: [
-        'Pursuing degree in Business, Management, or related field',
-        'Strong organizational and multitasking skills',
-        'Excellent communication and interpersonal abilities',
-        'Familiarity with project management tools (Asana, Jira, etc.)',
-        'Detail-oriented with problem-solving mindset',
-        'Interest in learning agile methodologies'
+        "Pursuing degree in Business, Management, or related field",
+        "Strong organizational and multitasking skills",
+        "Excellent communication and interpersonal abilities",
+        "Familiarity with project management tools (Asana, Jira, etc.)",
+        "Detail-oriented with problem-solving mindset",
+        "Interest in learning agile methodologies",
       ],
       benefits: [
-        'Hybrid work arrangement',
-        'Cross-functional team exposure',
-        'Project management training',
-        'Professional skill development',
-        'Path to full-time role'
-      ]
+        "Hybrid work arrangement",
+        "Cross-functional team exposure",
+        "Project management training",
+        "Professional skill development",
+        "Path to full-time role",
+      ],
     },
     {
-      title: 'Business Development Executive',
-      level: 'Mid-Level',
-      description: 'Drive new client relationships and growth opportunities.',
-      location: 'On-site',
-      type: 'Full-time',
-      department: 'Strategy',
-      fullDescription: 'We\'re looking for a dynamic Business Development Executive to expand our client portfolio and drive revenue growth. You\'ll identify opportunities, build relationships, and close deals with leading organizations.',
+      title: "Business Development Executive",
+      level: "Mid-Level",
+      description: "Drive new client relationships and growth opportunities.",
+      location: "On-site",
+      type: "Full-time",
+      department: "Strategy",
+      fullDescription:
+        "We're looking for a dynamic Business Development Executive to expand our client portfolio and drive revenue growth. You'll identify opportunities, build relationships, and close deals with leading organizations.",
       responsibilities: [
-        'Identify and pursue new business opportunities',
-        'Build and maintain relationships with prospective clients',
-        'Develop proposals and presentations for pitches',
-        'Negotiate contracts and close deals',
-        'Collaborate with delivery teams to ensure client satisfaction',
-        'Track pipeline and forecast revenue'
+        "Identify and pursue new business opportunities",
+        "Build and maintain relationships with prospective clients",
+        "Develop proposals and presentations for pitches",
+        "Negotiate contracts and close deals",
+        "Collaborate with delivery teams to ensure client satisfaction",
+        "Track pipeline and forecast revenue",
       ],
       qualifications: [
-        '3-5 years of B2B sales or business development experience',
-        'Proven track record of meeting or exceeding sales targets',
-        'Strong presentation and negotiation skills',
-        'Experience in tech, design, or digital services industry preferred',
-        'CRM proficiency (Salesforce, HubSpot, etc.)',
-        'Self-motivated with entrepreneurial mindset'
+        "3-5 years of B2B sales or business development experience",
+        "Proven track record of meeting or exceeding sales targets",
+        "Strong presentation and negotiation skills",
+        "Experience in tech, design, or digital services industry preferred",
+        "CRM proficiency (Salesforce, HubSpot, etc.)",
+        "Self-motivated with entrepreneurial mindset",
       ],
       benefits: [
-        'Base salary plus commission structure',
-        'Health insurance and benefits package',
-        'Professional networking opportunities',
-        'Leadership development programs',
-        'High-growth environment'
-      ]
+        "Base salary plus commission structure",
+        "Health insurance and benefits package",
+        "Professional networking opportunities",
+        "Leadership development programs",
+        "High-growth environment",
+      ],
     },
   ];
 
-  const filteredJobs = activeFilter === 'All' 
-    ? jobs 
-    : jobs.filter(job => job.department === activeFilter);
+  const filteredJobs =
+    activeFilter === "All"
+      ? jobs
+      : jobs.filter((job) => job.department === activeFilter);
 
   const jobsByDepartment = {
-    Design: jobs.filter(j => j.department === 'Design'),
-    Development: jobs.filter(j => j.department === 'Development'),
-    Marketing: jobs.filter(j => j.department === 'Marketing'),
-    Strategy: jobs.filter(j => j.department === 'Strategy'),
+    Design: jobs.filter((j) => j.department === "Design"),
+    Development: jobs.filter((j) => j.department === "Development"),
+    Marketing: jobs.filter((j) => j.department === "Marketing"),
+    Strategy: jobs.filter((j) => j.department === "Strategy"),
   };
 
   const handleApply = (job: Job) => {
@@ -318,89 +343,128 @@ export default function App() {
     setJobDetailsOpen(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleApplySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const resumeFile = formData.get('resume') as File;
+    const form = e.target as HTMLFormElement;
+    const name = (form.elements.namedItem("name") as HTMLInputElement).value;
+    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+    const resume = (form.elements.namedItem("resume") as HTMLInputElement)
+      .files?.[0];
+    const coverLetter = (
+      form.elements.namedItem("coverLetter") as HTMLTextAreaElement
+    ).value;
 
-    // Construct the text content for the email
-    const textContent = `
-      Job Application for ${selectedJob?.title}
-      First Name: ${formData.get('firstName')}
-      Last Name: ${formData.get('lastName')}
-      Email: ${formData.get('email')}
-      Phone: ${formData.get('phone')}
-      Portfolio/LinkedIn: ${formData.get('portfolio') || 'N/A'}
-      Cover Letter: ${formData.get('coverLetter')}
-    `;
-
-    // Prepare FormData for the backend
-    const emailData = new FormData();
-    emailData.append('to', 'jobs@yourcompany.com'); // Replace with your company email
-    emailData.append('subject', `Job Application for ${selectedJob?.title}`);
-    emailData.append('text', textContent);
-    if (resumeFile && resumeFile.size > 0) {
-      emailData.append('attachments', resumeFile);
+    if (!selectedJob) {
+      console.error("No job selected");
+      return;
     }
 
+    const formData = new FormData();
+
+    // Merge resume and cover letter into attachments array
+    if (resume) {
+      formData.append("attachments", resume);
+    }
+    if (coverLetter) {
+      const coverBlob = new Blob([coverLetter], { type: "text/plain" });
+      formData.append("attachments", coverBlob, "cover_letter.txt");
+    }
+
+    // Dynamic job title in subject (only title, no "Apply for" prefix as per request)
+    formData.append(
+      "subject",
+      `${selectedJob.title} - Application from ${name}`
+    );
+
+    // Email body (dynamic job title, but no "Apply for" phrasing as per request)
+    const html = `
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Job Title:</strong> ${selectedJob.title}</p>
+    <p>See attached resume and cover letter for details.</p>
+  `;
+    formData.append("html", html);
+
+    const text = `Name: ${name}\nEmail: ${email}\nJob Title: ${selectedJob.title}\nSee attached resume and cover letter for details.`;
+    formData.append("text", text);
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/email/send`, {
-        method: 'POST',
-        body: emailData,
+      const response = await fetch(`${API_URL}/api/email/send`, {
+        method: "POST",
+        body: formData,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit application');
+      if (response.ok) {
+        console.log("Application sent successfully");
+        alert('Your application has been sent successfully!');
+        setDialogOpen(false);
+        // Optional: Add a success alert or toast here
+      } else {
+        console.error("Failed to send application");
+        // Optional: Add an error alert or toast here
       }
-
-      console.log('Application submitted for:', selectedJob?.title);
-      setDialogOpen(false);
-    } catch (error) {
-      console.error('Failed to send application:', error);
-      alert('Failed to submit application. Please try again.');
+    } catch (err) {
+      console.error("Error sending application:", err);
     }
   };
 
   const handlePortfolioSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const portfolioFile = formData.get('portfolioFile') as File;
+    const form = e.target as HTMLFormElement;
+    const name = (form.elements.namedItem("portfolioName") as HTMLInputElement)
+      .value;
+    const email = (
+      form.elements.namedItem("portfolioEmail") as HTMLInputElement
+    ).value;
+    const url = (form.elements.namedItem("portfolioUrl") as HTMLInputElement)
+      .value;
+    const file = (form.elements.namedItem("portfolioFile") as HTMLInputElement)
+      .files?.[0];
+    const message = (
+      form.elements.namedItem("portfolioMessage") as HTMLTextAreaElement
+    ).value;
 
-    // Construct the text content for the email
-    const textContent = `
-      Portfolio Submission
-      Name: ${formData.get('portfolioName')}
-      Email: ${formData.get('portfolioEmail')}
-      Portfolio URL: ${formData.get('portfolioUrl') || 'N/A'}
-      Message: ${formData.get('portfolioMessage') || 'N/A'}
-    `;
+    const formData = new FormData();
 
-    // Prepare FormData for the backend
-    const emailData = new FormData();
-    emailData.append('to', 'jobs@yourcompany.com'); // Replace with your company email
-    emailData.append('subject', 'Portfolio Submission');
-    emailData.append('text', textContent);
-    if (portfolioFile && portfolioFile.size > 0) {
-      emailData.append('attachments', portfolioFile);
+    // Merge file and message into attachments array
+    if (file) {
+      formData.append("attachments", file);
+    }
+    if (message) {
+      const messageBlob = new Blob([message], { type: "text/plain" });
+      formData.append("attachments", messageBlob, "message.txt");
     }
 
+    formData.append("subject", `Portfolio Submission from ${name}`);
+
+    const html = `
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Portfolio URL:</strong> ${url || "N/A"}</p>
+    <p>See attached portfolio/resume and message for details.</p>
+  `;
+    formData.append("html", html);
+
+    const text = `Name: ${name}\nEmail: ${email}\nPortfolio URL: ${
+      url || "N/A"
+    }\nSee attached portfolio/resume and message for details.`;
+    formData.append("text", text);
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/email/send`, {
-        method: 'POST',
-        body: emailData,
+      const response = await fetch(`${API_URL}/api/email/send`, {
+        method: "POST",
+        body: formData,
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit portfolio');
+      if (response.ok) {
+        console.log("Portfolio sent successfully");
+        alert('Your portfolio has been sent successfully!'); 
+        setPortfolioDialogOpen(false);
+        // Optional: Add a success alert or toast here
+      } else {
+        console.error("Failed to send portfolio");
+        // Optional: Add an error alert or toast here
       }
-
-      console.log('Portfolio submitted');
-      setPortfolioDialogOpen(false);
-    } catch (error) {
-      console.error('Failed to send portfolio:', error);
-      alert('Failed to submit portfolio. Please try again.');
+    } catch (err) {
+      console.error("Error sending portfolio:", err);
     }
   };
 
@@ -411,7 +475,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           {/* Back to Home Button */}
           <Link
-            to="https://www.virtualtechx.com/home-1.html" // Replace with your homepage route or URL (e.g., 'https://yourcompany.com')
+            to="https://www.virtualtechx.com/home-1.html"
             className="absolute top-4 left-4 flex items-center gap-2 px-4 py-2 bg-black border border-zinc-800 rounded-full text-white hover:bg-zinc-800 hover:border-[#FFAC3E] transition-all duration-300"
           >
             <Home className="w-5 h-5 text-[#FFAC3E]" />
@@ -427,13 +491,20 @@ export default function App() {
               <Briefcase className="w-4 h-4 text-[#FFAC3E]" />
               <span className="text-sm text-zinc-400">We're Hiring</span>
             </div>
-            
-            <h1 className="mb-6 text-white" style={{ fontSize: '3.5rem', fontWeight: 700, lineHeight: 1.1 }}>
+
+            <h1
+              className="mb-6 text-white"
+              style={{ fontSize: "3.5rem", fontWeight: 700, lineHeight: 1.1 }}
+            >
               Current Openings
             </h1>
-            
-            <p className="text-zinc-400 max-w-3xl mx-auto" style={{ fontSize: '1.125rem' }}>
-              Explore roles across our creative, tech, and strategy teams. Join us in building the future of design and innovation.
+
+            <p
+              className="text-zinc-400 max-w-3xl mx-auto"
+              style={{ fontSize: "1.125rem" }}
+            >
+              Explore roles across our creative, tech, and strategy teams. Join
+              us in building the future of design and innovation.
             </p>
           </motion.div>
         </div>
@@ -449,8 +520,8 @@ export default function App() {
                 onClick={() => setActiveFilter(dept)}
                 className={`px-6 py-2.5 rounded-full transition-all duration-300 ${
                   activeFilter === dept
-                    ? 'bg-[#FFAC3E] text-black'
-                    : 'bg-black text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800'
+                    ? "bg-[#FFAC3E] text-black"
+                    : "bg-black text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800"
                 }`}
               >
                 {dept}
@@ -463,7 +534,7 @@ export default function App() {
       {/* Job Listings */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          {activeFilter === 'All' ? (
+          {activeFilter === "All" ? (
             // Department Expandable View
             <div className="space-y-6">
               {Object.entries(jobsByDepartment).map(([dept, deptJobs]) => (
@@ -476,7 +547,9 @@ export default function App() {
                 >
                   {/* Department Header */}
                   <button
-                    onClick={() => setExpandedDept(expandedDept === dept ? null : dept)}
+                    onClick={() =>
+                      setExpandedDept(expandedDept === dept ? null : dept)
+                    }
                     className="w-full px-8 py-6 flex items-center justify-between hover:bg-black/70 transition-colors"
                   >
                     <div className="flex items-center gap-4">
@@ -484,17 +557,21 @@ export default function App() {
                         <Briefcase className="w-6 h-6 text-[#FFAC3E]" />
                       </div>
                       <div className="text-left">
-                        <h2 className="text-white" style={{ fontSize: '1.5rem' }}>
+                        <h2
+                          className="text-white"
+                          style={{ fontSize: "1.5rem" }}
+                        >
                           {dept} Team
                         </h2>
                         <p className="text-zinc-500 text-sm">
-                          {deptJobs.length} Open Position{deptJobs.length !== 1 ? 's' : ''}
+                          {deptJobs.length} Open Position
+                          {deptJobs.length !== 1 ? "s" : ""}
                         </p>
                       </div>
                     </div>
                     <ChevronDown
                       className={`w-6 h-6 text-[#FFAC3E] transition-transform duration-300 ${
-                        expandedDept === dept ? 'rotate-180' : ''
+                        expandedDept === dept ? "rotate-180" : ""
                       }`}
                     />
                   </button>
@@ -503,14 +580,19 @@ export default function App() {
                   {expandedDept === dept && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
+                      animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       transition={{ duration: 0.3 }}
                       className="px-8 pb-8"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {deptJobs.map((job, index) => (
-                          <JobCard key={index} job={job} onApply={handleApply} onViewDetails={handleViewDetails} />
+                          <JobCard
+                            key={index}
+                            job={job}
+                            onApply={handleApply}
+                            onViewDetails={handleViewDetails}
+                          />
                         ))}
                       </div>
                     </motion.div>
@@ -522,7 +604,12 @@ export default function App() {
             // Filtered Grid View
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredJobs.map((job, index) => (
-                <JobCard key={index} job={job} onApply={handleApply} onViewDetails={handleViewDetails} />
+                <JobCard
+                  key={index}
+                  job={job}
+                  onApply={handleApply}
+                  onViewDetails={handleViewDetails}
+                />
               ))}
             </div>
           )}
@@ -538,13 +625,17 @@ export default function App() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="mb-4 text-white" style={{ fontSize: '2.5rem', fontWeight: 700 }}>
+            <h2
+              className="mb-4 text-white"
+              style={{ fontSize: "2.5rem", fontWeight: 700 }}
+            >
               Didn't find your role?
             </h2>
-            <p className="text-zinc-400 mb-8" style={{ fontSize: '1.125rem' }}>
-              We're always looking for creative minds. Send us your portfolio and let's talk.
+            <p className="text-zinc-400 mb-8" style={{ fontSize: "1.125rem" }}>
+              We're always looking for creative minds. Send us your portfolio
+              and let's talk.
             </p>
-            <Button 
+            <Button
               onClick={() => setPortfolioDialogOpen(true)}
               className="bg-[#FFAC3E] hover:bg-[#FF9A1E] text-black px-8 py-6 border-0 group"
             >
@@ -559,40 +650,32 @@ export default function App() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-black text-white border-zinc-800 max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-white" style={{ fontSize: '1.5rem' }}>
+            <DialogTitle className="text-white" style={{ fontSize: "1.5rem" }}>
               Apply for {selectedJob?.title}
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
               {selectedJob?.level} • {selectedJob?.department} Team
             </DialogDescription>
           </DialogHeader>
-          
-          <form onSubmit={handleSubmit} className="space-y-6 mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName" className="text-white">First Name</Label>
-                <Input
-                  id="firstName"
-                  name="firstName"
-                  placeholder="John"
-                  required
-                  className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName" className="text-white">Last Name</Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Doe"
-                  required
-                  className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
-                />
-              </div>
+
+          <form onSubmit={handleApplySubmit} className="space-y-6 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-white">
+                Full Name
+              </Label>
+              <Input
+                id="name"
+                name="name"
+                placeholder="John Doe"
+                required
+                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
+              />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-white">Email Address</Label>
+              <Label htmlFor="email" className="text-white">
+                Email Address
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -604,30 +687,9 @@ export default function App() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone" className="text-white">Phone Number</Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="+1 (555) 000-0000"
-                required
-                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="portfolio" className="text-white">Portfolio/LinkedIn URL</Label>
-              <Input
-                id="portfolio"
-                name="portfolio"
-                type="url"
-                placeholder="https://portfolio.com"
-                className="bg-black border-zinc-800 text-white placeholder:text-zinc-600 focus:border-[#FFAC3E]"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="resume" className="text-white">Resume (PDF/DOC)</Label>
+              <Label htmlFor="resume" className="text-white">
+                Resume (PDF/DOC)
+              </Label>
               <Input
                 id="resume"
                 name="resume"
@@ -639,7 +701,9 @@ export default function App() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="coverLetter" className="text-white">Cover Letter</Label>
+              <Label htmlFor="coverLetter" className="text-white">
+                Cover Letter
+              </Label>
               <Textarea
                 id="coverLetter"
                 name="coverLetter"
@@ -674,7 +738,7 @@ export default function App() {
       <Dialog open={portfolioDialogOpen} onOpenChange={setPortfolioDialogOpen}>
         <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-white" style={{ fontSize: '1.5rem' }}>
+            <DialogTitle className="text-white" style={{ fontSize: "1.5rem" }}>
               Send Your Portfolio
             </DialogTitle>
             <DialogDescription className="text-zinc-400">
@@ -684,7 +748,9 @@ export default function App() {
 
           <form className="space-y-4" onSubmit={handlePortfolioSubmit}>
             <div className="space-y-2">
-              <Label htmlFor="portfolioName" className="text-white">Full Name</Label>
+              <Label htmlFor="portfolioName" className="text-white">
+                Full Name
+              </Label>
               <Input
                 id="portfolioName"
                 name="portfolioName"
@@ -696,7 +762,9 @@ export default function App() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="portfolioEmail" className="text-white">Email</Label>
+              <Label htmlFor="portfolioEmail" className="text-white">
+                Email
+              </Label>
               <Input
                 id="portfolioEmail"
                 name="portfolioEmail"
@@ -708,7 +776,9 @@ export default function App() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="portfolioUrl" className="text-white">Portfolio URL</Label>
+              <Label htmlFor="portfolioUrl" className="text-white">
+                Portfolio URL
+              </Label>
               <Input
                 id="portfolioUrl"
                 name="portfolioUrl"
@@ -719,7 +789,9 @@ export default function App() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="portfolioFile" className="text-white">Portfolio / Resume (Optional)</Label>
+              <Label htmlFor="portfolioFile" className="text-white">
+                Portfolio / Resume (Optional)
+              </Label>
               <Input
                 id="portfolioFile"
                 name="portfolioFile"
@@ -730,7 +802,9 @@ export default function App() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="portfolioMessage" className="text-white">Message</Label>
+              <Label htmlFor="portfolioMessage" className="text-white">
+                Message
+              </Label>
               <Textarea
                 id="portfolioMessage"
                 name="portfolioMessage"
@@ -766,7 +840,10 @@ export default function App() {
           <DialogHeader>
             <div className="flex items-start justify-between mb-2">
               <div>
-                <DialogTitle className="text-black mb-2" style={{ fontSize: '1.75rem' }}>
+                <DialogTitle
+                  className="text-black mb-2"
+                  style={{ fontSize: "1.75rem" }}
+                >
                   {selectedJob?.title}
                 </DialogTitle>
                 <div className="flex flex-wrap gap-3 text-sm">
@@ -790,45 +867,69 @@ export default function App() {
             {/* Full Description */}
             {selectedJob?.fullDescription && (
               <div>
-                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>About the Role</h3>
-                <p className="text-zinc-700 leading-relaxed">{selectedJob.fullDescription}</p>
+                <h3
+                  className="text-white mb-3"
+                  style={{ fontSize: "1.125rem" }}
+                >
+                  About the Role
+                </h3>
+                <p className="text-zinc-700 leading-relaxed">
+                  {selectedJob.fullDescription}
+                </p>
               </div>
             )}
 
             {/* Responsibilities */}
-            {selectedJob?.responsibilities && selectedJob.responsibilities.length > 0 && (
-              <div>
-                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>Key Responsibilities</h3>
-                <ul className="space-y-2">
-                  {selectedJob.responsibilities.map((item, index) => (
-                    <li key={index} className="flex gap-3 text-zinc-700">
-                      <span className="text-[#FFAC3E] mt-1">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {selectedJob?.responsibilities &&
+              selectedJob.responsibilities.length > 0 && (
+                <div>
+                  <h3
+                    className="text-white mb-3"
+                    style={{ fontSize: "1.125rem" }}
+                  >
+                    Key Responsibilities
+                  </h3>
+                  <ul className="space-y-2">
+                    {selectedJob.responsibilities.map((item, index) => (
+                      <li key={index} className="flex gap-3 text-zinc-700">
+                        <span className="text-[#FFAC3E] mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
             {/* Qualifications */}
-            {selectedJob?.qualifications && selectedJob.qualifications.length > 0 && (
-              <div>
-                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>Qualifications</h3>
-                <ul className="space-y-2">
-                  {selectedJob.qualifications.map((item, index) => (
-                    <li key={index} className="flex gap-3 text-zinc-700">
-                      <span className="text-[#FFAC3E] mt-1">•</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {selectedJob?.qualifications &&
+              selectedJob.qualifications.length > 0 && (
+                <div>
+                  <h3
+                    className="text-white mb-3"
+                    style={{ fontSize: "1.125rem" }}
+                  >
+                    Qualifications
+                  </h3>
+                  <ul className="space-y-2">
+                    {selectedJob.qualifications.map((item, index) => (
+                      <li key={index} className="flex gap-3 text-zinc-700">
+                        <span className="text-[#FFAC3E] mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
             {/* Benefits */}
             {selectedJob?.benefits && selectedJob.benefits.length > 0 && (
               <div>
-                <h3 className="text-white mb-3" style={{ fontSize: '1.125rem' }}>What We Offer</h3>
+                <h3
+                  className="text-white mb-3"
+                  style={{ fontSize: "1.125rem" }}
+                >
+                  What We Offer
+                </h3>
                 <ul className="space-y-2">
                   {selectedJob.benefits.map((item, index) => (
                     <li key={index} className="flex gap-3 text-zinc-700">
@@ -867,7 +968,15 @@ export default function App() {
   );
 }
 
-function JobCard({ job, onApply, onViewDetails }: { job: Job; onApply: (job: Job) => void; onViewDetails: (job: Job) => void }) {
+function JobCard({
+  job,
+  onApply,
+  onViewDetails,
+}: {
+  job: Job;
+  onApply: (job: Job) => void;
+  onViewDetails: (job: Job) => void;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -883,14 +992,12 @@ function JobCard({ job, onApply, onViewDetails }: { job: Job; onApply: (job: Job
             {job.level}
           </span>
         </div>
-        
-        <h3 className="text-white mb-2" style={{ fontSize: '1.25rem' }}>
+
+        <h3 className="text-white mb-2" style={{ fontSize: "1.25rem" }}>
           {job.title}
         </h3>
-        
-        <p className="text-zinc-400 mb-4 line-clamp-2">
-          {job.description}
-        </p>
+
+        <p className="text-zinc-400 mb-4 line-clamp-2">{job.description}</p>
       </div>
 
       <div className="flex flex-wrap gap-4 mb-6 text-sm text-zinc-500">
