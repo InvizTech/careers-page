@@ -35,7 +35,7 @@ interface Job {
   benefits?: string[];
 }
 const COMPANY_EMAIL = "tushar@virtualtechx.com";
-const API_URL = process.env.REACT_APP_API_URL || 'https://express-nodemailer-server.vercel.app/';
+const API_URL = process.env.REACT_APP_API_URL || 'https://express-nodemailer-server.vercel.app';
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState("All");
