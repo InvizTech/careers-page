@@ -34,7 +34,7 @@ interface Job {
   qualifications?: string[];
   benefits?: string[];
 }
-const COMPANY_EMAIL = "sarthakdongare8@gmail.com";
+const COMPANY_EMAIL = "tushar@virtualtechx.com";
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 export default function App() {
