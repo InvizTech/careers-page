@@ -760,7 +760,7 @@ export default function App() {
             </DialogDescription>
           </DialogHeader>
 
-          <form className="space-y-4" onSubmit={handlePortfolioSubmit}>
+          <form className="space-y-6" onSubmit={handlePortfolioSubmit}>
             <div className="space-y-2">
               <Label htmlFor="portfolioName" className="text-white">
                 Full Name
