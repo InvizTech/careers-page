@@ -34,8 +34,8 @@ interface Job {
   qualifications?: string[];
   benefits?: string[];
 }
-
-const API_URL = process.env.REACT_APP_API_URL;
+const COMPANY_EMAIL = "sarthakdongare8@gmail.com";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 export default function App() {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -356,12 +356,12 @@ export default function App() {
 
     if (!selectedJob) {
       console.error("No job selected");
+      alert("No job selected. Please try again.");
       return;
     }
 
     const formData = new FormData();
 
-    // Merge resume and cover letter into attachments array
     if (resume) {
       formData.append("attachments", resume);
     }
@@ -370,13 +370,12 @@ export default function App() {
       formData.append("attachments", coverBlob, "cover_letter.txt");
     }
 
-    // Dynamic job title in subject (only title, no "Apply for" prefix as per request)
+    formData.append("to", COMPANY_EMAIL);
     formData.append(
       "subject",
       `${selectedJob.title} - Application from ${name}`
     );
 
-    // Email body (dynamic job title, but no "Apply for" phrasing as per request)
     const html = `
     <p><strong>Name:</strong> ${name}</p>
     <p><strong>Email:</strong> ${email}</p>
@@ -395,18 +394,26 @@ export default function App() {
       });
       if (response.ok) {
         console.log("Application sent successfully");
-        alert('Your application has been sent successfully!');
+        alert("Your application has been sent successfully!");
         setDialogOpen(false);
-        // Optional: Add a success alert or toast here
       } else {
-        console.error("Failed to send application");
-        // Optional: Add an error alert or toast here
+        let errorMessage = "Unknown error occurred.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || response.statusText;
+        } catch {
+          errorMessage = response.statusText || "Failed to send application.";
+        }
+        console.error("Failed to send application:", errorMessage);
+        alert(`Failed to send application: ${errorMessage}`);
       }
     } catch (err) {
       console.error("Error sending application:", err);
+      alert("Error sending application: Network error or server unreachable.");
     }
   };
 
+  // Updated handlePortfolioSubmit function
   const handlePortfolioSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -425,7 +432,6 @@ export default function App() {
 
     const formData = new FormData();
 
-    // Merge file and message into attachments array
     if (file) {
       formData.append("attachments", file);
     }
@@ -434,6 +440,7 @@ export default function App() {
       formData.append("attachments", messageBlob, "message.txt");
     }
 
+    formData.append("to", COMPANY_EMAIL);
     formData.append("subject", `Portfolio Submission from ${name}`);
 
     const html = `
@@ -456,15 +463,22 @@ export default function App() {
       });
       if (response.ok) {
         console.log("Portfolio sent successfully");
-        alert('Your portfolio has been sent successfully!'); 
+        alert("Your portfolio has been sent successfully!");
         setPortfolioDialogOpen(false);
-        // Optional: Add a success alert or toast here
       } else {
-        console.error("Failed to send portfolio");
-        // Optional: Add an error alert or toast here
+        let errorMessage = "Unknown error occurred.";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || response.statusText;
+        } catch {
+          errorMessage = response.statusText || "Failed to send portfolio.";
+        }
+        console.error("Failed to send portfolio:", errorMessage);
+        alert(`Failed to send portfolio: ${errorMessage}`);
       }
     } catch (err) {
       console.error("Error sending portfolio:", err);
+      alert("Error sending portfolio: Network error or server unreachable.");
     }
   };
 
